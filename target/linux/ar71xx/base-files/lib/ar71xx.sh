@@ -646,6 +646,9 @@ ar71xx_board_detect() {
 	*"ENS202EXT")
 		name="ens202ext"
 		;;
+	*"EMR3000")
+		name="emr3000"
+		;;
 	*"EPG5000")
 		name="epg5000"
 		;;
