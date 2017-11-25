@@ -29,3 +29,16 @@ define Device/ens202ext
   IMAGE/sysupgrade.bin := append-kernel | pad-to $$$$(KERNEL_SIZE) | append-rootfs | pad-rootfs | check-size $$$$(IMAGE_SIZE)
 endef
 TARGET_DEVICES += ens202ext
+
+define Device/emr3000
+  DEVICE_TITLE := EnGenius EMR3000
+  BOARDNAME := EMR3000
+  DEVICE_PACKAGES := kmod-usb-core kmod-usb2 kmod-usb-storage kmod-bluetooth kmod-ath10k ath10k-firmware-qca988x
+  KERNEL_SIZE := 1536kFIXME
+  IMAGE_SIZE := 13632kFIXME
+  IMAGES += factory.bin
+  MTDPARTS := spi0.0:256k(u-boot)ro,64k(u-boot-env),320k(custom)ro,1536k(kernel),12096k(rootfs),2048k(failsafe)ro,64k(art)ro,13632k@0xa0000(firmware)FIXME
+  IMAGE/factory.bin/squashfs := append-rootfs | pad-rootfs | senao-factory-image emr3000 $$$$@
+  IMAGE/sysupgrade.bin := append-kernel | pad-to $$$$(KERNEL_SIZE) | append-rootfs | pad-rootfs | check-size $$$$(IMAGE_SIZE)
+endef
+TARGET_DEVICES += emr3000
