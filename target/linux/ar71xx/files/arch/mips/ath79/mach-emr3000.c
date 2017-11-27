@@ -26,7 +26,7 @@
 #include "machtypes.h"
 #include "nvram.h"
 
-#define EMR3000_GPIO_LED_RED   	        11
+#define EMR3000_GPIO_LED_RED		11
 #define EMR3000_GPIO_LED_ORANGE 	16
 #define EMR3000_GPIO_LED_WHITE	        18
 #define EMR3000_GPIO_LED_BLUE	        19
