@@ -336,12 +336,6 @@ define LegacyDevice/EPG5000
 endef
 LEGACY_DEVICES += EPG5000
 
-define LegacyDevice/EMR3000
-  DEVICE_TITLE := EnGenius EMR3000
-  DEVICE_PACKAGES := kmod-usb-core kmod-usb2 kmod-usb-storage kmod-bluetooth kmod-ath10k ath10k-firmware-qca988x
-endef
-LEGACY_DEVICES += EMR3000
-
 define LegacyDevice/WP543_4M
   DEVICE_TITLE := Compex WP543/WPJ543 (4MB flash)
   DEVICE_PACKAGES := kmod-usb-core kmod-usb-ohci kmod-usb2
