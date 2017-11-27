@@ -50,22 +50,22 @@ static struct gpio_led emr3000_leds_gpio[] __initdata = {
 	{
 		.name		= "emr3000:red:front",
 		.gpio		= EMR3000_GPIO_LED_RED,
-		.active_low	= 1,
+		.active_low	= 0,
 	},
 	{
 		.name		= "emr3000:orange:front",
 		.gpio		= EMR3000_GPIO_LED_ORANGE,
-		.active_low	= 1,
+		.active_low	= 0,
 	},
 	{
 		.name		= "emr3000:white:front",
 		.gpio		= EMR3000_GPIO_LED_WHITE,
-		.active_low	= 1,
+		.active_low	= 0,
 	},
 	{
 		.name		= "emr3000:blue:front",
 		.gpio		= EMR3000_GPIO_LED_BLUE,
-		.active_low	= 1,
+		.active_low	= 0,
 	}
 };
 
