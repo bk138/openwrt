@@ -37,8 +37,10 @@
 #define EMR3000_KEYS_POLL_INTERVAL	20	/* msecs */
 #define EMR3000_KEYS_DEBOUNCE_INTERVAL	(3 * EMR3000_KEYS_POLL_INTERVAL)
 
-#define EMR3000_ART_ADDR        0x1f050000
-#define EMR3000_WMAC_CALDATA_OFFSET    0x1000
+#define EMR3000_ART_ADDR                0x1f050000
+#define EMR3000_MAC0_OFFSET             0x0
+#define EMR3000_MAC1_OFFSET             0x6
+#define EMR3000_WMAC_CALDATA_OFFSET     0x1000
 
 //FIXME
 #define EMR3000_NVRAM_ADDR	0x1f030000
@@ -86,6 +88,8 @@ static struct gpio_keys_button emr3000_gpio_keys[] __initdata = {
 	},
 };
 
+//FIXME
+/*
 static struct ar8327_pad_cfg emr3000_ar8327_pad0_cfg = {
 	.mode = AR8327_PAD_MAC_RGMII,
 	.txclk_delay_en = true,
@@ -112,7 +116,9 @@ static struct mdio_board_info emr3000_mdio0_info[] = {
 		.platform_data = &emr3000_ar8327_data,
 	},
 };
+*/
 
+/*
 static int emr3000_get_mac(const char *name, char *mac)
 {
 	u8 *nvram = (u8 *) KSEG1ADDR(EMR3000_NVRAM_ADDR);
@@ -127,11 +133,12 @@ static int emr3000_get_mac(const char *name, char *mac)
 
 	return true;
 }
+*/
 
 static void __init emr3000_setup(void)
 {
 	u8 *art = (u8 *) KSEG1ADDR(EMR3000_ART_ADDR);
-	u8 mac1[ETH_ALEN];
+	//u8 mac1[ETH_ALEN];
 
 	ath79_register_m25p80(NULL);
 
@@ -147,10 +154,37 @@ static void __init emr3000_setup(void)
 
 	ath79_register_mdio(0, 0x0);
 
-	mdiobus_register_board_info(emr3000_mdio0_info,
-					ARRAY_SIZE(emr3000_mdio0_info));
+	//FIXME
+	//mdiobus_register_board_info(emr3000_mdio0_info,
+	//				ARRAY_SIZE(emr3000_mdio0_info));
 
+
+	
+	/* GMAC0 is connected to an external PHY: AR8035 */
+	ath79_init_mac(ath79_eth0_data.mac_addr, art + EMR3000_MAC0_OFFSET, 0);
+	ath79_eth0_data.phy_if_mode = PHY_INTERFACE_MODE_RGMII;
+	ath79_eth0_data.phy_mask = BIT(1);
+	ath79_eth0_data.mii_bus_dev = &ath79_mdio0_device.dev;
+	ath79_eth0_pll_data.pll_1000 = 0x9a000000;
+	ath79_eth0_pll_data.pll_100  = 0x80000101;
+	ath79_eth0_pll_data.pll_10   = 0x80001313;
+
+	ath79_register_eth(0);
+
+	/* GMAC1 is connected to an external PHY: AR8033 */
+	ath79_init_mac(ath79_eth1_data.mac_addr, art + EMR3000_MAC1_OFFSET, 0);
+	ath79_eth1_data.phy_if_mode = PHY_INTERFACE_MODE_SGMII;
+	ath79_eth1_data.phy_mask = BIT(2);
+	ath79_eth1_data.mii_bus_dev = &ath79_mdio0_device.dev;
+	ath79_eth1_pll_data.pll_1000 = 0x9b000000;
+	ath79_eth1_pll_data.pll_100  = 0x80000101;
+	ath79_eth1_pll_data.pll_10   = 0x80001313;
+
+	ath79_register_eth(1);
+
+	//FIXME
 	/* GMAC0 is connected to an QCA8327N switch */
+	/*
 	ath79_eth0_data.phy_if_mode = PHY_INTERFACE_MODE_RGMII;
 	ath79_eth0_data.phy_mask = BIT(0);
 	ath79_eth0_data.mii_bus_dev = &ath79_mdio0_device.dev;
@@ -160,6 +194,8 @@ static void __init emr3000_setup(void)
 
 	ath79_eth0_pll_data.pll_1000 = 0xa6000000;
 	ath79_register_eth(0);
+	*/
+	
 
 	ath79_register_wmac(art + EMR3000_WMAC_CALDATA_OFFSET, NULL);
 
