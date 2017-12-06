@@ -37,10 +37,8 @@
 #define EMR3000_KEYS_POLL_INTERVAL	20	/* msecs */
 #define EMR3000_KEYS_DEBOUNCE_INTERVAL	(3 * EMR3000_KEYS_POLL_INTERVAL)
 
-//FIXME
-#define EMR3000_CALDATA_ADDR 0x1fff0000
-#define EMR3000_WMAC_CALDATA_OFFSET	0x1000
-#define EMR3000_PCIE_CALDATA_OFFSET	0x5000
+#define EMR3000_ART_ADDR        0x1f050000
+#define EMR3000_WMAC_CALDATA_OFFSET    0x1000
 
 //FIXME
 #define EMR3000_NVRAM_ADDR	0x1f030000
@@ -132,7 +130,7 @@ static int emr3000_get_mac(const char *name, char *mac)
 
 static void __init emr3000_setup(void)
 {
-	u8 *caldata = (u8 *) KSEG1ADDR(EMR3000_CALDATA_ADDR);
+	u8 *art = (u8 *) KSEG1ADDR(EMR3000_ART_ADDR);
 	u8 mac1[ETH_ALEN];
 
 	ath79_register_m25p80(NULL);
@@ -163,7 +161,7 @@ static void __init emr3000_setup(void)
 	ath79_eth0_pll_data.pll_1000 = 0xa6000000;
 	ath79_register_eth(0);
 
-	ath79_register_wmac(caldata + EMR3000_WMAC_CALDATA_OFFSET, mac1);
+	ath79_register_wmac(art + EMR3000_WMAC_CALDATA_OFFSET, NULL);
 
 	ath79_register_pci();
 }
