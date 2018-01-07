@@ -183,15 +183,6 @@ alfa_check_image() {
 	return 0
 }
 
-platform_nand_board_name() {
-	local board=$(board_name)
-
-	case "$board" in
-	rb*) echo "routerboard";;
-	*) echo "$board";;
-	esac
-}
-
 platform_check_image() {
 	local board=$(board_name)
 	local magic="$(get_magic_word "$1")"
@@ -238,6 +229,7 @@ platform_check_image() {
 	dlan-hotspot|\
 	dlan-pro-1200-ac|\
 	dlan-pro-500-wp|\
+	dr342|\
 	dr531|\
 	dragino2|\
 	ebr-2310-c1|\
@@ -278,6 +270,7 @@ platform_check_image() {
 	tew-712br|\
 	tew-732br|\
 	tew-823dru|\
+	tl-wr1043n-v5|\
 	tl-wr942n-v1|\
 	unifi|\
 	unifi-outdoor|\
@@ -423,6 +416,7 @@ platform_check_image() {
 	tl-wa901nd-v2|\
 	tl-wa901nd-v3|\
 	tl-wa901nd-v4|\
+	tl-wa901nd-v5|\
 	tl-wdr3320-v2|\
 	tl-wdr3500|\
 	tl-wdr4300|\
@@ -443,6 +437,7 @@ platform_check_image() {
 	tl-wr802n-v1|\
 	tl-wr802n-v2|\
 	tl-wr810n|\
+	tl-wr810n-v2|\
 	tl-wr840n-v2|\
 	tl-wr840n-v3|\
 	tl-wr841n-v1|\
@@ -518,6 +513,7 @@ platform_check_image() {
 	rb-911g-5hpacd|\
 	rb-912uag-2hpnd|\
 	rb-912uag-5hpnd|\
+	rb-921gs-5hpacd-r2|\
 	rb-951g-2hnd|\
 	rb-951ui-2hnd|\
 	rb-2011l|\
@@ -665,7 +661,9 @@ platform_check_image() {
 	rb-952ui-5ac2nd|\
 	rb-962uigs-5hact2hnt|\
 	rb-lhg-5nd|\
-	rb-mapl-2nd)
+	rb-map-2nd|\
+	rb-mapl-2nd|\
+	rb-wap-2nd)
 		return 0
 		;;
 	esac
@@ -701,6 +699,7 @@ platform_pre_upgrade() {
 	rb-911g-5hpnd|\
 	rb-912uag-2hpnd|\
 	rb-912uag-5hpnd|\
+	rb-921gs-5hpacd-r2|\
 	rb-951g-2hnd|\
 	rb-951ui-2hnd|\
 	rb-2011il|\
@@ -724,7 +723,9 @@ platform_pre_upgrade() {
 	rb-952ui-5ac2nd|\
 	rb-962uigs-5hact2hnt|\
 	rb-lhg-5nd|\
-	rb-mapl-2nd)
+	rb-map-2nd|\
+	rb-mapl-2nd|\
+	rb-wap-2nd)
 		# erase firmware if booted from initramfs
 		[ -z "$(rootfs_type)" ] && mtd erase firmware
 		;;

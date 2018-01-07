@@ -22,6 +22,7 @@ PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
 PKG_BUILD_PARALLEL:=1
 PKG_LICENSE:=GPL-2.0
+PKG_CPE_ID:=cpe:/a:netfilter_core_team:iptables
 
 include $(INCLUDE_DIR)/package.mk
 ifeq ($(DUMP),)
@@ -395,6 +396,15 @@ U32 iptables extensions.
 
 endef
 
+define Package/iptables-mod-checksum
+$(call Package/iptables/Module, +kmod-ipt-checksum)
+  TITLE:=IP CHECKSUM target extension
+endef
+
+define Package/iptables-mod-checksum/description
+iptables extension for the CHECKSUM calculation target
+endef
+
 define Package/ip6tables
 $(call Package/iptables/Default)
   DEPENDS:=@IPV6 +kmod-ip6tables +iptables
@@ -600,6 +610,7 @@ $(eval $(call BuildPlugin,iptables-mod-u32,$(IPT_U32-m)))
 $(eval $(call BuildPlugin,iptables-mod-nflog,$(IPT_NFLOG-m)))
 $(eval $(call BuildPlugin,iptables-mod-trace,$(IPT_DEBUG-m)))
 $(eval $(call BuildPlugin,iptables-mod-nfqueue,$(IPT_NFQUEUE-m)))
+$(eval $(call BuildPlugin,iptables-mod-checksum,$(IPT_CHECKSUM-m)))
 $(eval $(call BuildPackage,ip6tables))
 $(eval $(call BuildPlugin,ip6tables-extra,$(IPT_IPV6_EXTRA-m)))
 $(eval $(call BuildPlugin,ip6tables-mod-nat,$(IPT_NAT6-m)))

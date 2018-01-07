@@ -30,7 +30,7 @@ $(eval $(call KernelPackage,6lowpan))
 define KernelPackage/bluetooth
   SUBMENU:=$(OTHER_MENU)
   TITLE:=Bluetooth support
-  DEPENDS:=@USB_SUPPORT +kmod-usb-core +kmod-crypto-hash +kmod-crypto-ecb +kmod-lib-crc16 +kmod-hid +!LINUX_3_18:kmod-crypto-cmac +!LINUX_3_18:kmod-regmap
+  DEPENDS:=@USB_SUPPORT +kmod-usb-core +kmod-crypto-hash +kmod-crypto-ecb +kmod-lib-crc16 +kmod-hid +!LINUX_3_18:kmod-crypto-cmac +!LINUX_3_18:kmod-regmap +LINUX_4_14:kmod-crypto-ecdh
   KCONFIG:= \
 	CONFIG_BLUEZ \
 	CONFIG_BLUEZ_L2CAP \
@@ -317,7 +317,8 @@ define KernelPackage/mmc
 	CONFIG_SDIO_UART=n
   FILES:= \
 	$(LINUX_DIR)/drivers/mmc/core/mmc_core.ko \
-	$(LINUX_DIR)/drivers/mmc/card/mmc_block.ko
+	$(LINUX_DIR)/drivers/mmc/card/mmc_block.ko@lt4.10 \
+	$(LINUX_DIR)/drivers/mmc/core/mmc_block.ko@ge4.10
   AUTOLOAD:=$(call AutoProbe,mmc_core mmc_block,1)
 endef
 
@@ -442,7 +443,7 @@ define KernelPackage/rtc-ds1307
   SUBMENU:=$(OTHER_MENU)
   TITLE:=Dallas/Maxim DS1307 (and compatible) RTC support
   DEFAULT:=m if ALL_KMODS && RTC_SUPPORT
-  DEPENDS:=+kmod-i2c-core
+  DEPENDS:=+kmod-i2c-core +LINUX_4_14:kmod-regmap
   KCONFIG:=CONFIG_RTC_DRV_DS1307 \
 	CONFIG_RTC_CLASS=y
   FILES:=$(LINUX_DIR)/drivers/rtc/rtc-ds1307.ko
@@ -604,6 +605,20 @@ endef
 $(eval $(call KernelPackage,mtdtests))
 
 
+define KernelPackage/mtdoops
+  SUBMENU:=$(OTHER_MENU)
+  TITLE:=Log panic/oops to an MTD buffer
+  KCONFIG:=CONFIG_MTD_OOPS
+  FILES:=$(LINUX_DIR)/drivers/mtd/mtdoops.ko
+endef
+
+define KernelPackage/mtdoops/description
+ Kernel modules for Log panic/oops to an MTD buffer
+endef
+
+$(eval $(call KernelPackage,mtdoops))
+
+
 define KernelPackage/serial-8250
   SUBMENU:=$(OTHER_MENU)
   TITLE:=8250 UARTs
@@ -678,6 +693,7 @@ define KernelPackage/zram
 	CONFIG_ZRAM \
 	CONFIG_ZRAM_DEBUG=n \
 	CONFIG_PGTABLE_MAPPING=n \
+	CONFIG_ZRAM_WRITEBACK=n \
 	CONFIG_ZSMALLOC_STAT=n \
 	CONFIG_ZRAM_LZ4_COMPRESS=y
   FILES:= \
@@ -1017,3 +1033,21 @@ define KernelPackage/itco-wdt/description
 endef
 
 $(eval $(call KernelPackage,itco-wdt))
+
+
+define KernelPackage/it87-wdt
+  SUBMENU:=$(OTHER_MENU)
+  TITLE:=ITE IT87 Watchdog Timer
+  KCONFIG:=CONFIG_IT87_WDT
+  FILES:=$(LINUX_DIR)/drivers/$(WATCHDOG_DIR)/it87_wdt.ko
+  AUTOLOAD:=$(call AutoLoad,50,it87-wdt,1)
+  MODPARAMS.it87-wdt:= \
+	nogameport=1 \
+	nocir=1
+endef
+
+define KernelPackage/it87-wdt/description
+  Kernel module for ITE IT87 Watchdog Timer
+endef
+
+$(eval $(call KernelPackage,it87-wdt))
