@@ -42,8 +42,7 @@
 #define EMR3000_MAC1_OFFSET             0x6
 #define EMR3000_WMAC_CALDATA_OFFSET     0x1000
 
-//FIXME
-#define EMR3000_NVRAM_ADDR	0x1f030000
+#define EMR3000_NVRAM_ADDR	0x1f040000
 #define EMR3000_NVRAM_SIZE	0x10000
 
 static struct gpio_led emr3000_leds_gpio[] __initdata = {
@@ -118,7 +117,7 @@ static struct mdio_board_info emr3000_mdio0_info[] = {
 };
 */
 
-/*
+
 static int emr3000_get_mac(const char *name, char *mac)
 {
 	u8 *nvram = (u8 *) KSEG1ADDR(EMR3000_NVRAM_ADDR);
@@ -133,12 +132,12 @@ static int emr3000_get_mac(const char *name, char *mac)
 
 	return true;
 }
-*/
+
 
 static void __init emr3000_setup(void)
 {
 	u8 *art = (u8 *) KSEG1ADDR(EMR3000_ART_ADDR);
-	//u8 mac1[ETH_ALEN];
+	u8 mac0[ETH_ALEN], mac1[ETH_ALEN];
 
 	ath79_register_m25p80(NULL);
 
@@ -161,7 +160,8 @@ static void __init emr3000_setup(void)
 
 	
 	/* GMAC0 is connected to an external PHY: AR8035 */
-	ath79_init_mac(ath79_eth0_data.mac_addr, art + EMR3000_MAC0_OFFSET, 0);
+	if (emr3000_get_mac("wanaddr=", mac0))
+		ath79_init_mac(ath79_eth0_data.mac_addr, mac0, 0);
 	ath79_eth0_data.phy_if_mode = PHY_INTERFACE_MODE_RGMII;
 	ath79_eth0_data.phy_mask = BIT(1);
 	ath79_eth0_data.mii_bus_dev = &ath79_mdio0_device.dev;
@@ -172,7 +172,8 @@ static void __init emr3000_setup(void)
 	ath79_register_eth(0);
 
 	/* GMAC1 is connected to an external PHY: AR8033 */
-	ath79_init_mac(ath79_eth1_data.mac_addr, art + EMR3000_MAC1_OFFSET, 0);
+	if (emr3000_get_mac("ethaddr=", mac1))
+		ath79_init_mac(ath79_eth1_data.mac_addr, mac1, 0);
 	ath79_eth1_data.phy_if_mode = PHY_INTERFACE_MODE_SGMII;
 	ath79_eth1_data.phy_mask = BIT(2);
 	ath79_eth1_data.mii_bus_dev = &ath79_mdio0_device.dev;
