@@ -38,8 +38,6 @@
 #define EMR3000_KEYS_DEBOUNCE_INTERVAL	(3 * EMR3000_KEYS_POLL_INTERVAL)
 
 #define EMR3000_ART_ADDR                0x1f050000
-#define EMR3000_MAC0_OFFSET             0x0
-#define EMR3000_MAC1_OFFSET             0x6
 #define EMR3000_WMAC_CALDATA_OFFSET     0x1000
 
 #define EMR3000_NVRAM_ADDR	0x1f040000
@@ -198,7 +196,7 @@ static void __init emr3000_setup(void)
 	*/
 	
 
-	ath79_register_wmac(art + EMR3000_WMAC_CALDATA_OFFSET, NULL);
+	ath79_register_wmac(art + EMR3000_WMAC_CALDATA_OFFSET, mac1);
 
 	ath79_register_pci();
 }
