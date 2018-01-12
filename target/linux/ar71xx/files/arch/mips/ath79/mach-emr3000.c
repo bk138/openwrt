@@ -115,6 +115,28 @@ static struct mdio_board_info emr3000_mdio0_info[] = {
 };
 */
 
+static void __init emr3000_setup_qca955x_eth_cfg(u32 mask,
+						unsigned int rxd,
+						unsigned int rxdv,
+						unsigned int txd,
+						unsigned int txe)
+{
+	void __iomem *base;
+	u32 t;
+
+	base = ioremap(QCA955X_GMAC_BASE, QCA955X_GMAC_SIZE);
+
+	t = mask;
+	t |= rxd << QCA955X_ETH_CFG_RXD_DELAY_SHIFT;
+	t |= rxdv << QCA955X_ETH_CFG_RDV_DELAY_SHIFT;
+	t |= txd << QCA955X_ETH_CFG_TXD_DELAY_SHIFT;
+	t |= txe << QCA955X_ETH_CFG_TXE_DELAY_SHIFT;
+
+	__raw_writel(t, base + QCA955X_GMAC_REG_ETH_CFG);
+
+	iounmap(base);
+}
+
 
 static int emr3000_get_mac(const char *name, char *mac)
 {
@@ -147,7 +169,7 @@ static void __init emr3000_setup(void)
 
 	ath79_register_usb();
 
-	ath79_setup_qca955x_eth_cfg(QCA955X_ETH_CFG_RGMII_EN);
+	emr3000_setup_qca955x_eth_cfg(QCA955X_ETH_CFG_RGMII_EN, 3, 3, 0, 0);
 
 	ath79_register_mdio(0, 0x0);
 
