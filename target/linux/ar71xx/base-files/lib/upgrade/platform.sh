@@ -233,8 +233,8 @@ platform_check_image() {
 	dr531|\
 	dragino2|\
 	ebr-2310-c1|\
-	ens202ext|\
 	emr3000|\
+	ens202ext|\
 	epg5000|\
 	esr1750|\
 	esr900|\
