@@ -35,7 +35,7 @@ define Device/emr3000
   IMAGE_SIZE := 32064k
   IMAGES += factory.bin
   MTDPARTS := spi0.0:256k(u-boot)ro,64k(u-boot-env)ro,64k(art)ro,1408k(kernel),30656k(rootfs),320k(config)ro,32064k@0x60000(firmware)
-  IMAGE/factory.bin/squashfs := append-rootfs | pad-rootfs | senao-factory-image emr3000 $$$$@
+  IMAGE/factory.bin := append-rootfs | pad-rootfs | senao-factory-image emr3000
   IMAGE/sysupgrade.bin := append-kernel | pad-to $$$$(KERNEL_SIZE) | append-rootfs | pad-rootfs | check-size $$$$(IMAGE_SIZE)
 endef
 TARGET_DEVICES += emr3000
