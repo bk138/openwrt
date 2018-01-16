@@ -203,21 +203,6 @@ static void __init emr3000_setup(void)
 
 	ath79_register_eth(1);
 
-	//FIXME
-	/* GMAC0 is connected to an QCA8327N switch */
-	/*
-	ath79_eth0_data.phy_if_mode = PHY_INTERFACE_MODE_RGMII;
-	ath79_eth0_data.phy_mask = BIT(0);
-	ath79_eth0_data.mii_bus_dev = &ath79_mdio0_device.dev;
-
-	if (emr3000_get_mac("ethaddr=", mac1))
-		ath79_init_mac(ath79_eth0_data.mac_addr, mac1, 0);
-
-	ath79_eth0_pll_data.pll_1000 = 0xa6000000;
-	ath79_register_eth(0);
-	*/
-	
-
 	ath79_register_wmac(art + EMR3000_WMAC_CALDATA_OFFSET, mac1);
 
 	ath79_register_pci();
