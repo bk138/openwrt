@@ -61,6 +61,7 @@ platform_check_image() {
 	fonera20n|\
 	freestation5|\
 	gb-pc1|\
+	gb-pc2|\
 	gl-mt300a|\
 	gl-mt300n|\
 	gl-mt750|\
@@ -167,7 +168,8 @@ platform_check_image() {
 	whr-300hp2|\
 	whr-600d|\
 	whr-g300n|\
-	widora-neo|\
+	widora,neo-16m|\
+	widora,neo-32m|\
 	witi|\
 	wizfi630a|\
 	wl-330n|\
@@ -203,6 +205,7 @@ platform_check_image() {
 	zbt-ape522ii|\
 	zbt-cpe102|\
 	zbt-wa05|\
+	zbtlink,zbt-we1226|\
 	zbt-we1326|\
 	zbt-we2026|\
 	zbtlink,zbt-we3526|\
@@ -242,6 +245,7 @@ platform_check_image() {
 	mr200|\
 	tplink,c20-v1|\
 	tplink,c20-v4|\
+	tplink,c50-v3|\
 	tplink,tl-mr3420-v5|\
 	tl-wr840n-v4|\
 	tl-wr840n-v5|\

@@ -209,6 +209,7 @@ platform_check_image() {
 	cf-e316n-v2|\
 	cf-e320n-v2|\
 	cf-e355ac|\
+	cf-e375ac|\
 	cf-e380ac-v1|\
 	cf-e380ac-v2|\
 	cf-e520n|\
@@ -238,6 +239,7 @@ platform_check_image() {
 	epg5000|\
 	esr1750|\
 	esr900|\
+	ew-balin|\
 	ew-dorin|\
 	ew-dorin-router|\
 	gl-ar150|\
@@ -261,6 +263,7 @@ platform_check_image() {
 	pqi-air-pen|\
 	r36a|\
 	r602n|\
+	rme-eg200|\
 	rocket-m|\
 	rocket-m-ti|\
 	rocket-m-xw|\
@@ -389,6 +392,7 @@ platform_check_image() {
 	omy-x1|\
 	onion-omega|\
 	oolite|\
+	re355|\
 	re450|\
 	rut900|\
 	smart-300|\
@@ -661,6 +665,8 @@ platform_check_image() {
 	rb-750-r2|\
 	rb-750p-pbr2|\
 	rb-750up-r2|\
+	rb-911-2hn|\
+	rb-911-5hn|\
 	rb-941-2nd|\
 	rb-951ui-2nd|\
 	rb-952ui-5ac2nd|\
@@ -724,6 +730,8 @@ platform_pre_upgrade() {
 	rb-750-r2|\
 	rb-750p-pbr2|\
 	rb-750up-r2|\
+	rb-911-2hn|\
+	rb-911-5hn|\
 	rb-941-2nd|\
 	rb-951ui-2nd|\
 	rb-952ui-5ac2nd|\

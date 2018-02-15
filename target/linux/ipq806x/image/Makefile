@@ -84,7 +84,7 @@ define Device/avm_fritzbox-4040
 	IMAGE_SIZE := 29753344
 	IMAGES = sysupgrade.bin
 	IMAGE/sysupgrade.bin := append-kernel | append-rootfs | pad-rootfs | append-metadata
-	DEVICE_PACKAGES := kmod-usb-phy-qcom-ipq4019 ipq-wifi-fritz4040 fritz-tffs fritz-caldata u-boot-fritz4040
+	DEVICE_PACKAGES := ipq-wifi-avm_fritzbox-4040 fritz-tffs fritz-caldata u-boot-fritz4040
 endef
 TARGET_DEVICES += avm_fritzbox-4040
 
@@ -165,6 +165,21 @@ define Device/netgear_r7800
 endef
 TARGET_DEVICES += netgear_r7800
 
+define Device/glinet_gl-b1300
+	DEVICE_TITLE := GL.iNet GL-B1300
+	BOARD_NAME := gl-b1300
+	DEVICE_DTS := qcom-ipq4019-gl-b1300
+	KERNEL_LOADADDR := 0x80208000
+	KERNEL_INSTALL := 1
+	KERNEL_SIZE := 4096k
+	IMAGE_SIZE := 26624k
+	$(call Device/FitImage)
+	IMAGES := sysupgrade.bin
+	IMAGE/sysupgrade.bin := append-kernel | pad-to $$$${KERNEL_SIZE} | append-rootfs | pad-rootfs | append-metadata
+	DEVICE_PACKAGES := ipq-wifi-glinet_gl-b1300
+endef
+TARGET_DEVICES += glinet_gl-b1300
+
 define Device/openmesh_a42
 	$(call Device/FitImageLzma)
 	DEVICE_DTS := qcom-ipq4019-a42
@@ -177,7 +192,7 @@ define Device/openmesh_a42
 	IMAGES = factory.bin sysupgrade.bin
 	IMAGE/factory.bin := append-rootfs | pad-rootfs | openmesh-image ce_type=A42
 	IMAGE/sysupgrade.bin/squashfs := append-rootfs | pad-rootfs | sysupgrade-tar rootfs=$$$$@ | append-metadata
-	DEVICE_PACKAGES := ath10k-firmware-qca4019 uboot-envtools ipq-wifi-openmesh_a42
+	DEVICE_PACKAGES := ath10k-firmware-qca4019 uboot-envtools
 endef
 TARGET_DEVICES += openmesh_a42
 

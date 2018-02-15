@@ -93,6 +93,8 @@ ar71xx_setup_interfaces()
 	pqi-air-pen|\
 	rb-411|\
 	rb-411u|\
+	rb-911-2hn|\
+	rb-911-5hn|\
 	rb-911g-2hpnd|\
 	rb-911g-5hpacd|\
 	rb-911g-5hpnd|\
@@ -105,6 +107,7 @@ ar71xx_setup_interfaces()
 	rb-sxt5n|\
 	rb-wap-2nd|\
 	rb-wapg-5hact2hnd|\
+	re355|\
 	re450|\
 	rocket-m-xw|\
 	sc300m |\
@@ -260,7 +263,8 @@ ar71xx_setup_interfaces()
 		ucidef_add_switch "switch0" \
 			"0@eth0" "3:wan" "4:lan"
 		;;
-	cap324)
+	cap324|\
+	rme-eg200)
 		ucidef_set_interface_lan "eth0" "dhcp"
 		;;
 	cpe210|\
@@ -371,6 +375,12 @@ ar71xx_setup_interfaces()
 		ucidef_add_switch "switch0" \
 			"0@eth0" "1:lan:4" "2:lan:3" "3:lan:2" "4:lan:1" "5:wan"
 		;;
+	ew-balin)
+# usb0 is RNDIS interface over USB in device mode
+		ucidef_set_interface_raw "usb2" "usb0" "static"
+		ucidef_add_switch "switch0" \
+			"0@eth0" "5:lan:4" "4:lan:5" "3:wan"
+		;;
 	ew-dorin)
 		ucidef_add_switch "switch0" \
 			"0@eth0" "1:lan" "2:lan" "3:wan"
@@ -427,6 +437,7 @@ ar71xx_setup_interfaces()
 		ucidef_add_switch "switch1" \
 			"0@eth1" "1:lan:4" "2:lan:1" "3:lan:3" "4:lan:2" "5:wan"
 		;;
+	cf-e375ac |\
 	rb-map-2nd)
 		ucidef_add_switch "switch0" \
 			"0@eth0" "1:wan" "2:lan"
