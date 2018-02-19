@@ -145,7 +145,7 @@ static void __init emr3000_setup(void)
 
 	ath79_register_mdio(0, 0x0);
 
-	/* GMAC0 is connected to an external PHY: AR8035 */
+	/* GMAC0 is connected to RGMII interface */
 	if (emr3000_get_mac("wanaddr=", mac0))
 		ath79_init_mac(ath79_eth0_data.mac_addr, mac0, 0);
 	ath79_eth0_data.phy_if_mode = PHY_INTERFACE_MODE_RGMII;
@@ -157,7 +157,7 @@ static void __init emr3000_setup(void)
 
 	ath79_register_eth(0);
 
-	/* GMAC1 is connected to an external PHY: AR8033 */
+	/* GMAC1 is connected to SGMII interface */
 	if (emr3000_get_mac("ethaddr=", mac1))
 		ath79_init_mac(ath79_eth1_data.mac_addr, mac1, 0);
 	ath79_eth1_data.phy_if_mode = PHY_INTERFACE_MODE_SGMII;
