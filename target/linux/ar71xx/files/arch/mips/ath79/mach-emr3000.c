@@ -85,35 +85,6 @@ static struct gpio_keys_button emr3000_gpio_keys[] __initdata = {
 	},
 };
 
-//FIXME
-/*
-static struct ar8327_pad_cfg emr3000_ar8327_pad0_cfg = {
-	.mode = AR8327_PAD_MAC_RGMII,
-	.txclk_delay_en = true,
-	.rxclk_delay_en = true,
-	.txclk_delay_sel = AR8327_CLK_DELAY_SEL2,
-	.rxclk_delay_sel = AR8327_CLK_DELAY_SEL2,
-};
-
-static struct ar8327_platform_data emr3000_ar8327_data = {
-	.pad0_cfg = &emr3000_ar8327_pad0_cfg,
-	.port0_cfg = {
-		.force_link = 1,
-		.speed = AR8327_PORT_SPEED_1000,
-		.duplex = 1,
-		.txpause = 1,
-		.rxpause = 1,
-	},
-};
-
-static struct mdio_board_info emr3000_mdio0_info[] = {
-	{
-		.bus_id = "ag71xx-mdio.0",
-		.phy_addr = 0,
-		.platform_data = &emr3000_ar8327_data,
-	},
-};
-*/
 
 static void __init emr3000_setup_qca955x_eth_cfg(u32 mask,
 						unsigned int rxd,
@@ -173,12 +144,6 @@ static void __init emr3000_setup(void)
 
 	ath79_register_mdio(0, 0x0);
 
-	//FIXME
-	//mdiobus_register_board_info(emr3000_mdio0_info,
-	//				ARRAY_SIZE(emr3000_mdio0_info));
-
-
-	
 	/* GMAC0 is connected to an external PHY: AR8035 */
 	if (emr3000_get_mac("wanaddr=", mac0))
 		ath79_init_mac(ath79_eth0_data.mac_addr, mac0, 0);
