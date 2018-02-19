@@ -152,8 +152,8 @@ static void __init emr3000_setup(void)
 	ath79_eth0_data.phy_mask = BIT(1);
 	ath79_eth0_data.mii_bus_dev = &ath79_mdio0_device.dev;
 	ath79_eth0_pll_data.pll_1000 = 0x9a000000;
-	ath79_eth0_pll_data.pll_100  = 0x80000101;
-	ath79_eth0_pll_data.pll_10   = 0x80001313;
+	ath79_eth0_pll_data.pll_100 = 0x80000101;
+	ath79_eth0_pll_data.pll_10 = 0x80001313;
 
 	ath79_register_eth(0);
 
@@ -164,8 +164,8 @@ static void __init emr3000_setup(void)
 	ath79_eth1_data.phy_mask = BIT(2);
 	ath79_eth1_data.mii_bus_dev = &ath79_mdio0_device.dev;
 	ath79_eth1_pll_data.pll_1000 = 0x9b000000;
-	ath79_eth1_pll_data.pll_100  = 0x80000101;
-	ath79_eth1_pll_data.pll_10   = 0x80001313;
+	ath79_eth1_pll_data.pll_100 = 0x80000101;
+	ath79_eth1_pll_data.pll_10 = 0x80001313;
 
 	ath79_register_eth(1);
 
