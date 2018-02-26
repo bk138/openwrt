@@ -13,6 +13,16 @@ define Build/senao-factory-image
 	rm -rf $@.senao
 endef
 
+define Build/senao-factory-image-with-id
+	-$(STAGING_DIR_HOST)/bin/mksenaofw \
+		-e $@ \
+		-r 0x101 \
+		-p $(1) \
+		-t 2 \
+		-o $@.new
+	@mv $@.new $@
+endef
+
 
 define Device/ens202ext
   DEVICE_TITLE := EnGenius ENS202EXT
@@ -35,7 +45,7 @@ define Device/emr3000
   IMAGE_SIZE := 32064k
   IMAGES += factory.bin
   MTDPARTS := spi0.0:256k(u-boot)ro,64k(u-boot-env)ro,64k(art)ro,1536k(kernel),30528k(rootfs),320k(config)ro,32064k@0x60000(firmware)
-  IMAGE/factory.bin := append-rootfs | pad-rootfs | senao-factory-image emr3000
   IMAGE/sysupgrade.bin := append-kernel | pad-to $$$$(KERNEL_SIZE) | append-rootfs | pad-rootfs | check-size $$$$(IMAGE_SIZE)
+  IMAGE/factory.bin := $$(IMAGE/sysupgrade.bin) | senao-factory-image-with-id 0x83
 endef
 TARGET_DEVICES += emr3000
