@@ -32,8 +32,7 @@
 #define EMR3000_GPIO_LED_WHITE	        18
 #define EMR3000_GPIO_LED_BLUE	        19
 
-#define EMR3000_GPIO_BTN_WPS		17
-#define EMR3000_GPIO_BTN_RESET		20
+#define EMR3000_GPIO_BTN_RESET		17
 
 #define EMR3000_KEYS_POLL_INTERVAL	20	/* msecs */
 #define EMR3000_KEYS_DEBOUNCE_INTERVAL	(3 * EMR3000_KEYS_POLL_INTERVAL)
@@ -68,14 +67,6 @@ static struct gpio_led emr3000_leds_gpio[] __initdata = {
 };
 
 static struct gpio_keys_button emr3000_gpio_keys[] __initdata = {
-	{
-		.desc		= "WPS button",
-		.type		= EV_KEY,
-		.code		= KEY_WPS_BUTTON,
-		.debounce_interval = EMR3000_KEYS_DEBOUNCE_INTERVAL,
-		.gpio		= EMR3000_GPIO_BTN_WPS,
-		.active_low	= 1,
-	},
 	{
 		.desc		= "Reset button",
 		.type		= EV_KEY,
