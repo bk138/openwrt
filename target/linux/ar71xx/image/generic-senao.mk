@@ -40,7 +40,7 @@ TARGET_DEVICES += ens202ext
 define Device/emr3000
   DEVICE_TITLE := EnGenius EMR3000
   BOARDNAME := EMR3000
-  DEVICE_PACKAGES := kmod-usb-core kmod-usb2 kmod-usb-storage kmod-bluetooth kmod-ath10k ath10k-firmware-qca988x
+  DEVICE_PACKAGES := kmod-usb-core kmod-usb2 kmod-usb-storage kmod-ath10k ath10k-firmware-qca988x
   KERNEL_SIZE := 1536k
   IMAGE_SIZE := 32064k
   IMAGES += factory.bin
