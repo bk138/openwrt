@@ -447,6 +447,23 @@ endef
 $(eval $(call KernelPackage,mvsas))
 
 
+define KernelPackage/hpsa
+  SUBMENU:=$(BLOCK_MENU)
+  TITLE:=HP Smart Array SCSI driver
+  DEPENDS:=@TARGET_x86 +kmod-libsas
+  KCONFIG:= \
+	CONFIG_SCSI_HPSA
+  FILES:=$(LINUX_DIR)/drivers/scsi/hpsa.ko
+  AUTOLOAD:=$(call AutoLoad,40,hpsa,1)
+endef
+
+define KernelPackage/hpsa/description
+ Kernel support for the HP Smart Array SCSI adapters
+endef
+
+$(eval $(call KernelPackage,hpsa))
+
+
 define KernelPackage/nbd
   SUBMENU:=$(BLOCK_MENU)
   TITLE:=Network block device support
