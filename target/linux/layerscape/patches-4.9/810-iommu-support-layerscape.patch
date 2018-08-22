@@ -995,7 +995,7 @@ Signed-off-by: Yangbo Lu <yangbo.lu@nxp.com>
  };
  
  struct dmar_atsr_unit {
-@@ -4252,27 +4253,40 @@ static inline void init_iommu_pm_ops(voi
+@@ -4251,27 +4252,40 @@ static inline void init_iommu_pm_ops(voi
  int __init dmar_parse_one_rmrr(struct acpi_dmar_header *header, void *arg)
  {
  	struct acpi_dmar_reserved_memory *rmrr;
@@ -1041,7 +1041,7 @@ Signed-off-by: Yangbo Lu <yangbo.lu@nxp.com>
  }
  
  static struct dmar_atsr_unit *dmar_find_atsr(struct acpi_dmar_atsr *atsr)
-@@ -4486,6 +4500,7 @@ static void intel_iommu_free_dmars(void)
+@@ -4485,6 +4499,7 @@ static void intel_iommu_free_dmars(void)
  	list_for_each_entry_safe(rmrru, rmrr_n, &dmar_rmrr_units, list) {
  		list_del(&rmrru->list);
  		dmar_free_dev_scope(&rmrru->devices, &rmrru->devices_cnt);
@@ -1049,7 +1049,7 @@ Signed-off-by: Yangbo Lu <yangbo.lu@nxp.com>
  		kfree(rmrru);
  	}
  
-@@ -5221,6 +5236,45 @@ static void intel_iommu_remove_device(st
+@@ -5220,6 +5235,45 @@ static void intel_iommu_remove_device(st
  	iommu_device_unlink(iommu->iommu_dev, dev);
  }
  
@@ -1095,7 +1095,7 @@ Signed-off-by: Yangbo Lu <yangbo.lu@nxp.com>
  #ifdef CONFIG_INTEL_IOMMU_SVM
  #define MAX_NR_PASID_BITS (20)
  static inline unsigned long intel_iommu_get_pts(struct intel_iommu *iommu)
-@@ -5351,19 +5405,21 @@ struct intel_iommu *intel_svm_device_to_
+@@ -5350,19 +5404,21 @@ struct intel_iommu *intel_svm_device_to_
  #endif /* CONFIG_INTEL_IOMMU_SVM */
  
  static const struct iommu_ops intel_iommu_ops = {
@@ -1472,7 +1472,7 @@ Signed-off-by: Yangbo Lu <yangbo.lu@nxp.com>
  }
 --- a/include/linux/dma-iommu.h
 +++ b/include/linux/dma-iommu.h
-@@ -27,6 +27,7 @@ int iommu_dma_init(void);
+@@ -28,6 +28,7 @@ int iommu_dma_init(void);
  
  /* Domain management interface for IOMMU drivers */
  int iommu_get_dma_cookie(struct iommu_domain *domain);
@@ -1480,7 +1480,7 @@ Signed-off-by: Yangbo Lu <yangbo.lu@nxp.com>
  void iommu_put_dma_cookie(struct iommu_domain *domain);
  
  /* Setup call for arch DMA mapping code */
-@@ -66,6 +67,7 @@ int iommu_dma_mapping_error(struct devic
+@@ -67,6 +68,7 @@ int iommu_dma_mapping_error(struct devic
  
  /* The DMA API isn't _quite_ the whole story, though... */
  void iommu_dma_map_msi_msg(int irq, struct msi_msg *msg);
@@ -1488,7 +1488,7 @@ Signed-off-by: Yangbo Lu <yangbo.lu@nxp.com>
  
  #else
  
-@@ -82,6 +84,11 @@ static inline int iommu_get_dma_cookie(s
+@@ -83,6 +85,11 @@ static inline int iommu_get_dma_cookie(s
  	return -ENODEV;
  }
  
@@ -1500,7 +1500,7 @@ Signed-off-by: Yangbo Lu <yangbo.lu@nxp.com>
  static inline void iommu_put_dma_cookie(struct iommu_domain *domain)
  {
  }
-@@ -90,6 +97,10 @@ static inline void iommu_dma_map_msi_msg
+@@ -91,6 +98,10 @@ static inline void iommu_dma_map_msi_msg
  {
  }
  

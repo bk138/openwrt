@@ -9,9 +9,9 @@
 include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/kernel.mk
 
-PKG_VERSION:=2017.07
+PKG_VERSION:=2018.05
 
-PKG_HASH:=5374bfdc8acb9a38c025371b1ff20f45e7533668e84e685d0df5d9e7c0e4feff
+PKG_HASH:=4da13c2a6139a78cc08608f21fd4741db27eda336cfad7ab8264fda923b9c048
 
 PKG_MAINTAINER:=Zoltan HERPAI <wigyori@uid0.hu>
 
@@ -190,11 +190,28 @@ define U-Boot/pine64_plus
   UENV:=a64
 endef
 
+define U-Boot/sopine_baseboard
+  BUILD_SUBTARGET:=cortexa53
+  NAME:=Sopine Baseboard
+  BUILD_DEVICES:=sun50i-a64-sopine-baseboard
+  DEPENDS:=+PACKAGE_u-boot-sopine_baseboard:arm-trusted-firmware-sunxi
+  UENV:=a64
+endef
+
+
 define U-Boot/orangepi_zero_plus
   BUILD_SUBTARGET:=cortexa53
   NAME:=Xunlong Orange Pi Zero Plus
   BUILD_DEVICES:=sun50i-h5-orangepi-zero-plus
   DEPENDS:=+PACKAGE_u-boot-orangepi_zero_plus:arm-trusted-firmware-sunxi
+  UENV:=a64
+endef
+
+define U-Boot/orangepi_pc2
+  BUILD_SUBTARGET:=cortexa53
+  NAME:=Xunlong Orange Pi PC2
+  BUILD_DEVICES:=sun50i-h5-orangepi-pc2
+  DEPENDS:=+PACKAGE_u-boot-orangepi_pc2:arm-trusted-firmware-sunxi
   UENV:=a64
 endef
 
@@ -224,8 +241,10 @@ UBOOT_TARGETS := \
 	orangepi_pc \
 	orangepi_plus \
 	orangepi_2 \
+	orangepi_pc2 \
 	pangolin \
 	pine64_plus \
+	sopine_baseboard \
 	orangepi_zero_plus
 
 UBOOT_CONFIGURE_VARS += USE_PRIVATE_LIBGCC=yes
@@ -235,11 +254,7 @@ UBOOT_MAKE_FLAGS += \
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(STAGING_DIR_IMAGE)
-ifeq ($(SUBTARGET),cortexa53)
-	cat $(PKG_BUILD_DIR)/spl/sunxi-spl.bin $(PKG_BUILD_DIR)/u-boot.itb > $(STAGING_DIR_IMAGE)/$(BUILD_DEVICES)-u-boot-with-spl.bin
-else
 	$(CP) $(PKG_BUILD_DIR)/$(UBOOT_IMAGE) $(STAGING_DIR_IMAGE)/$(BUILD_DEVICES)-u-boot-with-spl.bin
-endif
 	mkimage -C none -A arm -T script -d uEnv-$(UENV).txt \
 		$(STAGING_DIR_IMAGE)/$(BUILD_DEVICES)-boot.scr
 endef

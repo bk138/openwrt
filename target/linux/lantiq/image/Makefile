@@ -101,6 +101,7 @@ endef
 
 define Device/AVM
   KERNEL := kernel-bin | append-dtb | lzma | eva-image
+  KERNEL_INITRAMFS := $$(KERNEL)
   IMAGE/sysupgrade.bin := append-kernel | pad-to 64k | append-avm-fakeroot | \
 	append-rootfs | pad-rootfs | append-metadata | check-size $$$$(IMAGE_SIZE)
 endef
@@ -484,6 +485,19 @@ define Device/buffalo_wbmr-hp-g300h-b
 endef
 TARGET_DEVICES += buffalo_wbmr-hp-g300h-b
 
+define Device/avm_fritz7312
+  $(Device/AVM)
+  DEVICE_DTS := FRITZ7312
+  IMAGE_SIZE := 15744k
+  DEVICE_TITLE := 1&1 WLAN-MODEM - FRITZ7312
+  DEVICE_PACKAGES := kmod-ath9k kmod-owl-loader wpad-mini \
+	kmod-ltq-adsl-ar9-mei kmod-ltq-adsl-ar9 \
+	kmod-ltq-adsl-ar9-fw-b kmod-ltq-atm-ar9 \
+	ltq-adsl-app ppp-mod-pppoa \
+	kmod-ltq-deu-ar9 -swconfig
+endef
+TARGET_DEVICES += avm_fritz7312
+
 define Device/avm_fritz7320
   $(Device/AVM)
   DEVICE_DTS := FRITZ7320
@@ -583,6 +597,10 @@ TARGET_DEVICES += bt_homehub-v5a
 define Device/netgear_dm200
   DEVICE_DTS := DM200
   IMAGES := sysupgrade.bin factory.img
+  IMAGE/sysupgrade.bin := append-kernel | \
+	pad-offset 64k 64 | append-uImage-fakehdr filesystem | \
+	pad-offset 64k 64 | append-uImage-fakehdr filesystem | \
+	append-rootfs | pad-rootfs | append-metadata | check-size $$$$(IMAGE_SIZE)
   IMAGE/factory.img := $$(IMAGE/sysupgrade.bin) | netgear-dni
   IMAGE_SIZE := 7872k
   DEVICE_TITLE := Netgear DM200
@@ -612,13 +630,29 @@ TARGET_DEVICES += lantiq_easy80920-nor
 define Device/avm_fritz3370
   $(Device/AVM)
   $(Device/NAND)
-  BOARD_NAME := FRITZ3370
   DEVICE_DTS := FRITZ3370
-  DEVICE_TITLE := Fritz!Box WLan - FRITZ3370
-  DEVICE_PACKAGES := kmod-ath9k wpad-mini kmod-usb-dwc2
-  SUPPORTED_DEVICES += FRITZ3370
+  DEVICE_TITLE := AVM Fritz!Box WLan 3370 Rev. 2
+  KERNEL_SIZE := 4096k
+  UBINIZE_OPTS := -E 5
+  IMAGES += eva-kernel.bin eva-filesystem.bin
+  IMAGE/eva-kernel.bin := append-kernel
+  IMAGE/eva-filesystem.bin := append-ubi
+  DEVICE_PACKAGES := kmod-ath9k wpad-mini kmod-usb-dwc2 fritz-tffs
 endef
-TARGET_DEVICES += avm_fritz3370
+
+define Device/avm_fritz3370-rev2-hynix
+  $(Device/avm_fritz3370)
+  DEVICE_DTS := FRITZ3370-REV2-HYNIX
+  DEVICE_TITLE := AVM Fritz!Box WLan 3370 Rev. 2 (Hynix NAND)
+endef
+TARGET_DEVICES += avm_fritz3370-rev2-hynix
+
+define Device/avm_fritz3370-rev2-micron
+  $(Device/avm_fritz3370)
+  DEVICE_DTS := FRITZ3370-REV2-MICRON
+  DEVICE_TITLE := AVM Fritz!Box WLan 3370 Rev. 2 (Micron NAND)
+endef
+TARGET_DEVICES += avm_fritz3370-rev2-micron
 
 define Device/avm_fritz7360sl
   $(Device/AVM)

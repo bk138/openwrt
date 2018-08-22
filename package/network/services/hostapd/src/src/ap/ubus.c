@@ -20,6 +20,7 @@
 #include "beacon.h"
 #include "rrm.h"
 #include "wnm_ap.h"
+#include "taxonomy.h"
 
 static struct ubus_context *ctx;
 static struct blob_buf b;
@@ -184,9 +185,29 @@ hostapd_bss_get_clients(struct ubus_context *ctx, struct ubus_object *obj,
 			blobmsg_add_u32(&b, "", sta->rrm_enabled_capa[i]);
 		blobmsg_close_array(&b, r);
 		blobmsg_add_u32(&b, "aid", sta->aid);
+#ifdef CONFIG_TAXONOMY
+		r = blobmsg_alloc_string_buffer(&b, "signature", 1024);
+		if (retrieve_sta_taxonomy(hapd, sta, r, 1024) > 0)
+			blobmsg_add_string_buffer(&b);
+#endif
 		blobmsg_close_table(&b, c);
 	}
 	blobmsg_close_array(&b, list);
+	ubus_send_reply(ctx, req, b.head);
+
+	return 0;
+}
+
+static int
+hostapd_bss_get_features(struct ubus_context *ctx, struct ubus_object *obj,
+			struct ubus_request_data *req, const char *method,
+			struct blob_attr *msg)
+{
+	struct hostapd_data *hapd = container_of(obj, struct hostapd_data, ubus.obj);
+
+	blob_buf_init(&b, 0);
+	blobmsg_add_u8(&b, "ht_supported", ht_supported(hapd->iface->hw_features));
+	blobmsg_add_u8(&b, "vht_supported", vht_supported(hapd->iface->hw_features));
 	ubus_send_reply(ctx, req, b.head);
 
 	return 0;
@@ -909,6 +930,7 @@ static const struct ubus_method bss_methods[] = {
 	UBUS_METHOD_NOARG("wps_start", hostapd_bss_wps_start),
 	UBUS_METHOD_NOARG("wps_cancel", hostapd_bss_wps_cancel),
 	UBUS_METHOD_NOARG("update_beacon", hostapd_bss_update_beacon),
+	UBUS_METHOD_NOARG("get_features", hostapd_bss_get_features),
 #ifdef NEED_AP_MLME
 	UBUS_METHOD("switch_chan", hostapd_switch_chan, csa_policy),
 #endif
@@ -1021,6 +1043,47 @@ int hostapd_ubus_handle_event(struct hostapd_data *hapd, struct hostapd_ubus_req
 	if (req->frame_info)
 		blobmsg_add_u32(&b, "signal", req->frame_info->ssi_signal);
 	blobmsg_add_u32(&b, "freq", hapd->iface->freq);
+
+	if (req->elems) {
+		if(req->elems->ht_capabilities)
+		{
+			struct ieee80211_ht_capabilities *ht_capabilities;
+			void *ht_cap, *ht_cap_mcs_set, *mcs_set;
+
+
+			ht_capabilities = (struct ieee80211_ht_capabilities*) req->elems->ht_capabilities;
+			ht_cap = blobmsg_open_table(&b, "ht_capabilities");
+			blobmsg_add_u16(&b, "ht_capabilities_info", ht_capabilities->ht_capabilities_info);
+			ht_cap_mcs_set = blobmsg_open_table(&b, "supported_mcs_set");		
+			blobmsg_add_u16(&b, "a_mpdu_params", ht_capabilities->a_mpdu_params);
+			blobmsg_add_u16(&b, "ht_extended_capabilities", ht_capabilities->ht_extended_capabilities);
+			blobmsg_add_u32(&b, "tx_bf_capability_info", ht_capabilities->tx_bf_capability_info);
+			blobmsg_add_u16(&b, "asel_capabilities", ht_capabilities->asel_capabilities);
+			mcs_set = blobmsg_open_array(&b, "supported_mcs_set");
+			for (int i = 0; i < 16; i++) {
+				blobmsg_add_u16(&b, NULL, (u16) ht_capabilities->supported_mcs_set[i]);
+			}
+			blobmsg_close_array(&b, mcs_set);
+			blobmsg_close_table(&b, ht_cap_mcs_set);
+			blobmsg_close_table(&b, ht_cap);		
+		}
+		if(req->elems->vht_capabilities)
+		{
+			struct ieee80211_vht_capabilities *vht_capabilities;
+			void *vht_cap, *vht_cap_mcs_set;
+
+			vht_capabilities = (struct ieee80211_vht_capabilities*) req->elems->vht_capabilities;
+			vht_cap = blobmsg_open_table(&b, "vht_capabilities");
+			blobmsg_add_u32(&b, "vht_capabilities_info", vht_capabilities->vht_capabilities_info);
+			vht_cap_mcs_set = blobmsg_open_table(&b, "vht_supported_mcs_set");
+			blobmsg_add_u16(&b, "rx_map", vht_capabilities->vht_supported_mcs_set.rx_map);
+			blobmsg_add_u16(&b, "rx_highest", vht_capabilities->vht_supported_mcs_set.rx_highest);
+			blobmsg_add_u16(&b, "tx_map", vht_capabilities->vht_supported_mcs_set.tx_map);
+			blobmsg_add_u16(&b, "tx_highest", vht_capabilities->vht_supported_mcs_set.tx_highest);
+			blobmsg_close_table(&b, vht_cap_mcs_set);
+			blobmsg_close_table(&b, vht_cap);
+		}
+	}
 
 	if (!hapd->ubus.notify_response) {
 		ubus_notify(ctx, &hapd->ubus.obj, type, b.head, -1);

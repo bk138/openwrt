@@ -17,7 +17,7 @@ DEFAULT_PACKAGES:=base-files libc libgcc busybox dropbear mtd uci opkg netifd fs
 # For nas targets
 DEFAULT_PACKAGES.nas:=block-mount fdisk lsblk mdadm
 # For router targets
-DEFAULT_PACKAGES.router:=dnsmasq iptables ip6tables ppp ppp-mod-pppoe firewall odhcpd-ipv6only odhcp6c
+DEFAULT_PACKAGES.router:=dnsmasq iptables ip6tables ppp ppp-mod-pppoe firewall odhcpd-ipv6only odhcp6c kmod-ipt-offload
 DEFAULT_PACKAGES.bootloader:=
 
 ifneq ($(DUMP),)
@@ -51,6 +51,10 @@ else
   endif
 endif
 
+ifneq ($(filter 3.18 4.9,$(KERNEL_PATCHVER)),)
+  DEFAULT_PACKAGES.router:=$(filter-out kmod-ipt-offload,$(DEFAULT_PACKAGES.router))
+endif
+
 # Add device specific packages (here below to allow device type set from subtarget)
 DEFAULT_PACKAGES += $(DEFAULT_PACKAGES.$(DEVICE_TYPE))
 
@@ -68,7 +72,6 @@ define Profile
   $(eval $(call ProfileDefault))
   $(eval $(call Profile/$(1)))
   dumpinfo : $(call shexport,Profile/$(1)/Description)
-  DEFAULT_PACKAGES := $(filter-out $(patsubst -%,%,$(filter -%,$(PACKAGES))),$(DEFAULT_PACKAGES))
   PACKAGES := $(filter-out -%,$(PACKAGES))
   DUMPINFO += \
 	echo "Target-Profile: $(1)"; \
@@ -172,6 +175,7 @@ ifeq ($(DUMP),1)
     CPU_CFLAGS_24kc = -mips32r2 -mtune=24kc
     CPU_CFLAGS_74kc = -mips32r2 -mtune=74kc
     CPU_CFLAGS_octeon = -march=octeon -mabi=64
+    CPU_CFLAGS_octeonplus = -march=octeon+ -mabi=64
   endif
   ifeq ($(ARCH),i386)
     CPU_TYPE ?= pentium
@@ -190,6 +194,7 @@ ifeq ($(DUMP),1)
     CPU_CFLAGS_cortex-a9 = -mcpu=cortex-a9
     CPU_CFLAGS_cortex-a15 = -mcpu=cortex-a15
     CPU_CFLAGS_cortex-a53 = -mcpu=cortex-a53
+    CPU_CFLAGS_cortex-a72 = -mcpu=cortex-a72
     CPU_CFLAGS_fa526 = -mcpu=fa526
     CPU_CFLAGS_mpcore = -mcpu=mpcore
     CPU_CFLAGS_xscale = -mcpu=xscale
